@@ -28,7 +28,7 @@ print(f"mean_reward={mean_reward:.2f} +/- {std_reward}")
 # Reset the environment to start a new episode
 observation, info = env.reset()
 
-# Use the trained model to make decisions instead of taking random actions
+# Use the trained model to make decisions instead of taking random actions. 5000 ri
 for _ in range(5000):  # or however many steps you want to run
     # Use the trained model to predict the next action
     action, _states = model.predict(observation, deterministic=True)
@@ -37,7 +37,20 @@ for _ in range(5000):  # or however many steps you want to run
     observation, reward, terminated, truncated, info = env.step(action)
     
     # Print out the details
-    print(f"Action taken by the model: {action}")
+    # 0=nothing, 1=fire left engine, 2=fire main, 3=fire right
+    action_text = ""
+    if action == 0:
+        action_text = "nothing"
+    elif action == 1:
+        action_text = "left engine"
+    elif action == 2:
+        action_text = "fire main engine"
+    elif action == 3:
+        action_text = "fire right engine"
+    else:
+        action_text = "unknown action"
+    print(f"Action taken by the model: {action_text}")
+    # vector with (x, y, vx, vy, angle, angular_v, left_leg, right_leg)
     print("Observation:", observation)
     print("Reward received:", reward)
     
