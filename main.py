@@ -1,45 +1,49 @@
-# import environment
 import gymnasium as gym
-import random
 
-import torch
-import torch.nn as nn
-import torch.optim as optim
-import torch.nn.functional as F
-import torchvision.transforms as T
-from torch.nn.functional import mse_loss
+from stable_baselines3 import PPO
+from stable_baselines3.common.vec_env import DummyVecEnv
+from stable_baselines3.common.env_util import make_vec_env
+from stable_baselines3.common.monitor import Monitor
+from stable_baselines3.common.evaluation import evaluate_policy
 
-from torch import optim
-import copy
-from collections import namedtuple
+# create environment called LunarLander-v2
+env = gym.make("LunarLander-v2", render_mode="human")
 
-from itertools import count
-import math
+# Load the trained model
+model_name = "ppo-LunarLander-v2"
 
-import matplotlib.pyplot as plt
-%matplotlib inline
+try:
+    # Try to load the model
+    model = PPO.load(model_name)
+except FileNotFoundError:
+    print(f"Model {model_name} not found. Please ensure the model is saved correctly.")
 
-# Deep Q Learning Network
-# Using a deep Q network to solve the discrete lunar lander challenge. https://gym.openai.com/envs/LunarLander-v2/
-#
-# Landing pad is always at coordinates (0,0). Coordinates are the first two numbers in state vector. Reward for
-# moving from the top of the screen to landing pad and zero speed is about 100..140 points. If lander moves away from
-# landing pad it loses reward back. Episode finishes if the lander crashes or comes to rest, receiving additional
-# -100 or +100 points. Each leg ground contact is +10. Firing main engine is -0.3 points each frame. Solved is 200
-# points. Landing outside landing pad is possible. Fuel is infinite, so an agent can learn to fly and then land on
-# its first attempt. Four discrete actions available: do nothing, fire left orientation engine, fire main engine,
-# fire right orientation engine.
+# Use Monitor for evaluation environment
+eval_env = Monitor(gym.make("LunarLander-v2"))
 
-# create the environment and explore the action and observation space.
-env = gym.make('LunarLander-v2')
-# env = gym.make(
-#     "LunarLander-v2",
-#     continuous: bool = False,
-#     gravity: float = -10.0,
-#     enable_wind: bool = False,
-#     wind_power: float = 15.0,
-#     turbulence_power: float = 1.5,
-# )
+# Evaluate the policy if the model is loaded
+mean_reward, std_reward = evaluate_policy(model, eval_env, n_eval_episodes=10, deterministic=True)
+print(f"mean_reward={mean_reward:.2f} +/- {std_reward}")
 
-print('Example action {}'.format(env.action_space.sample()))
-print('Example observation space {}'.format(env.reset()))
+# Reset the environment to start a new episode
+observation, info = env.reset()
+
+# Use the trained model to make decisions instead of taking random actions
+for _ in range(5000):  # or however many steps you want to run
+    # Use the trained model to predict the next action
+    action, _states = model.predict(observation, deterministic=True)
+    
+    # Take the action in the environment
+    observation, reward, terminated, truncated, info = env.step(action)
+    
+    # Print out the details
+    print(f"Action taken by the model: {action}")
+    print("Observation:", observation)
+    print("Reward received:", reward)
+    
+    # Check if the episode has ended
+    if terminated or truncated:
+        print("Episode finished, resetting environment.")
+        observation, info = env.reset()
+
+env.close()
