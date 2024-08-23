@@ -6,18 +6,18 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
-# import torchvision.transforms as T
-# from torch.nn.functional import mse_loss
-#
-# from torch import optim
-# import copy
-# from collections import namedtuple
-#
-# from itertools import count
+import torchvision.transforms as T
+from torch.nn.functional import mse_loss
+
+from torch import optim
+import copy
+from collections import namedtuple
+
+from itertools import count
 import math
 
 import matplotlib.pyplot as plt
-# %matplotlib inline
+%matplotlib inline
 
 # Deep Q Learning Network
 # Using a deep Q network to solve the discrete lunar lander challenge. https://gym.openai.com/envs/LunarLander-v2/
@@ -41,5 +41,5 @@ env = gym.make('LunarLander-v2')
 #     turbulence_power: float = 1.5,
 # )
 
-# print('Example action {}'.format(env.action_space.sample()))
-# print('Example observation space {}'.format(env.reset()))
+print('Example action {}'.format(env.action_space.sample()))
+print('Example observation space {}'.format(env.reset()))
