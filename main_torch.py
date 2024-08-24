@@ -20,7 +20,7 @@ os.makedirs(FOLDER_NAME, exist_ok=True)
 os.makedirs('plots', exist_ok=True)
 
 LEARN_EVERY = 4
-def train_agent(n_episodes=2000, epsilon=1.0, epsilon_dec=0.995, batch_size=128, lr=0.001, load_latest_model=False):
+def train_agent(n_episodes=1500, epsilon=1.0, epsilon_dec=0.995, batch_size=128, lr=0.001, load_latest_model=False):
     print(f"Training a DDQN agent on {n_episodes} episodes. Pretrained model = {load_latest_model}")
     
     # Creates an environment
@@ -142,7 +142,7 @@ def train_agent(n_episodes=2000, epsilon=1.0, epsilon_dec=0.995, batch_size=128,
 ###############################
 # Uncomment to train ##########
 ###############################
-agent = train_agent(n_episodes=1500, load_latest_model=False)
+agent = train_agent(lr=0.0001, load_latest_model=False) # tweaking learning rate
 
 
 ################################
