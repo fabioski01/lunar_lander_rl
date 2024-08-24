@@ -142,7 +142,7 @@ def train_agent(n_episodes=2000, epsilon=1.0, epsilon_dec=0.995, batch_size=128,
 ###############################
 # Uncomment to train ##########
 ###############################
-agent = train_agent(n_episodes=200, load_latest_model=False)
+agent = train_agent(n_episodes=1500, load_latest_model=False)
 
 
 ################################
