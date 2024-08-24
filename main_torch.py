@@ -7,13 +7,12 @@ import numpy as np
 from train_torch import DoubleQAgent # This imports the DoubleQAgent class from your train_torch.py file, which contains the core logic for the agent.
 
 FOLDER_NAME = 'torch_model'
-# MODEL_FILENAME = f'{FOLDER_NAME}/ddqn_torch_model_750.h5' # Change this to change the name of the save
-LOAD_MODEL_FILENAME = f'{FOLDER_NAME}/ddqn_torch_model.h5' # Change this to change model to load
+LOAD_MODEL_FILENAME = f'{FOLDER_NAME}/ddqn_model' # Change this to change model to load
 
-FILENAME_TEMPLATE = f'{FOLDER_NAME}/ddqn_model_{{episodes}}_eps_{{eps}}_eps_d_{{eps_d}}_bs_{{bs}}_lr_{{lr}}.h5'
+MODEL_FILENAME_TEMPLATE = f'{FOLDER_NAME}/ddqn_model_{{episodes}}_eps_{{eps}}_eps_d_{{eps_d}}_bs_{{bs}}_lr_{{lr}}.h5'
 SCORES_FILENAME_TEMPLATE = f'{FOLDER_NAME}/dqn_scores_{{episodes}}_eps_{{eps}}_eps_d_{{eps_d}}_bs_{{bs}}_lr_{{lr}}.json'
 EPSILON_HISTORY_FILENAME_TEMPLATE = f'{FOLDER_NAME}/epsilon_history_{{episodes}}_eps_{{eps}}_eps_d_{{eps_d}}_bs_{{bs}}_lr_{{lr}}.json'
-PLOT_FILENAME_TEMPLATE = f'{FOLDER_NAME}/reward_per_episode_{{episodes}}_eps_{{eps}}_eps_d_{{eps_d}}_bs_{{bs}}_lr_{{lr}}.png'
+PLOT_FILENAME_TEMPLATE = f'plots/reward_per_episode_{{episodes}}_eps_{{eps}}_eps_d_{{eps_d}}_bs_{{bs}}_lr_{{lr}}.png'
 
 # Ensure the directory exists
 import os
@@ -67,20 +66,57 @@ def train_agent(n_episodes=2000, epsilon=1.0, epsilon_dec=0.995, batch_size=128,
                                                                                                                       avg_score))
             
         if (i+1) % 100 == 0 and i > 0:
-            model_filename = f'{MODEL_FILENAME}_{n_episodes}_eps_{epsilon}_eps_d_{epsilon_dec}_bs_{batch_size}_lr_{lr}.h5'
-            scores_filename = SCORES_FILENAME_TEMPLATE.format(n_episodes, epsilon, epsilon_dec, batch_size, lr)
-            eps_history_filename = EPSILON_HISTORY_FILENAME_TEMPLATE.format(n_episodes, epsilon, epsilon_dec, batch_size, lr)
+            model_filename = MODEL_FILENAME_TEMPLATE.format(
+                episodes=n_episodes,
+                eps=epsilon,
+                eps_d=epsilon_dec,
+                bs=batch_size,
+                lr=lr
+            )
+            scores_filename = SCORES_FILENAME_TEMPLATE.format(
+                episodes=n_episodes,
+                eps=epsilon,
+                eps_d=epsilon_dec,
+                bs=batch_size,
+                lr=lr
+            )
+            eps_history_filename = EPSILON_HISTORY_FILENAME_TEMPLATE.format(
+                episodes=n_episodes,
+                eps=epsilon,
+                eps_d=epsilon_dec,
+                bs=batch_size,
+                lr=lr
+            )
             
             print(f"Saving model to: {model_filename}")
             print(f"Saving scores to: {scores_filename}")
             print(f"Saving epsilon history to: {eps_history_filename}")
             
-            agent.save_model(model_filename)
+            try:
+                agent.save_model(model_filename)
+            except Exception as e:
+                print(f"Error saving model: {e}")
             
-            with open(scores_filename, "w") as fp:
-                json.dump(scores, fp)
-            with open(eps_history_filename, "w") as fp:
-                json.dump(eps_history, fp)
+            try:
+                with open(scores_filename, "w") as fp:
+                    json.dump(scores, fp)
+                print(f"Scores saved successfully to: {scores_filename}")
+            except Exception as e:
+                print(f"Error saving scores JSON: {e}")
+
+            try:
+                with open(eps_history_filename, "w") as fp:
+                    json.dump(eps_history, fp)
+                print(f"Epsilon history saved successfully to: {eps_history_filename}")
+            except Exception as e:
+                print(f"Error saving epsilon history JSON: {e}")
+
+            # # Save the model every N-th step just in case
+            # agent.save_model('ddqn_torch_model.h5')
+            # with open("ddqn_torch_dqn_scores_{}.json".format(int(time.time())), "w") as fp:
+            #     json.dump(scores, fp)
+            # with open("ddqn_torch_eps_history_{}.json".format(int(time.time())), "w") as fp:
+            #     json.dump(eps_history, fp)
                 
     # Plotting rewards per episode
     plt.figure(figsize=(10, 5))
@@ -106,7 +142,7 @@ def train_agent(n_episodes=2000, epsilon=1.0, epsilon_dec=0.995, batch_size=128,
 ###############################
 # Uncomment to train ##########
 ###############################
-agent = train_agent(n_episodes=20, load_latest_model=False)
+agent = train_agent(n_episodes=200, load_latest_model=False)
 
 
 ################################
