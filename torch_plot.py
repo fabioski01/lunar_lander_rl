@@ -21,8 +21,8 @@ SCORES_FILENAME_TEMPLATE = f'{FOLDER_NAME}/dqn_scores_{{episodes}}_eps_{{eps}}_e
 #########################################################
 
 epsilon = 1.0
-epsilon_dec = 0.995
-# batch_size = 128
+# epsilon_dec = 0.995
+batch_size = 128
 lr = 0.001
 
 #########################################################
@@ -215,9 +215,102 @@ lr = 0.001
 #########################################################
 ###################### BATCH SIZE #######################
 #########################################################
+# # Prepare to plot
+# plt.figure(figsize=(12, 6))
+# for batch_size in batch_size_values:
+#     # Generate filename
+#     scores_filename = SCORES_FILENAME_TEMPLATE.format(
+#         episodes=n_episodes,
+#         eps=epsilon,
+#         eps_d=epsilon_dec,
+#         bs=batch_size,
+#         lr=lr
+#     )
+    
+#     # Check if file exists
+#     if not os.path.isfile(scores_filename):
+#         print(f"File not found: {scores_filename}")
+#         continue
+#     # Load scores
+#     try:
+#         with open(scores_filename, 'r') as fp:
+#             scores = json.load(fp)
+#     except Exception as e:
+#         print(f"Error loading scores from {scores_filename}: {e}")
+#         continue
+
+#     # Plot
+#     plt.plot(range(1, n_episodes + 1), scores, label=f'B.S.={batch_size}', marker='o')
+
+# # Finalize the plot
+# plt.xlabel('Episode')
+# plt.ylabel('Reward')
+# plt.title(f'Reward per Episode for different models with \n(epsilon ={epsilon}, epsilon_decrement={epsilon_dec}, Learning Rate={lr})')
+# plt.legend()
+# plt.grid(True)
+
+# # Save and show the plot
+# plot_filename = f'plots/reward_per_episode_comparison_bs-{n_episodes}_eps_{epsilon}_eps_d_{epsilon_dec}_lr_{lr}.png'
+# plt.savefig(plot_filename)
+# print(f"Plot saved to: {plot_filename}")
+# plt.show()
+
+# ### Average reward plot
+# # Prepare to plot
+# plt.figure(figsize=(12, 6))
+# for batch_size in batch_size_values:
+#     # Generate filename
+#     scores_filename = SCORES_FILENAME_TEMPLATE.format(
+#         episodes=n_episodes,
+#         eps=epsilon,
+#         eps_d=epsilon_dec,
+#         bs=batch_size,
+#         lr=lr
+#     )
+    
+#     # Check if file exists
+#     if not os.path.isfile(scores_filename):
+#         print(f"File not found: {scores_filename}")
+#         continue
+
+#     # Load scores
+#     try:
+#         with open(scores_filename, 'r') as fp:
+#             scores = json.load(fp)
+#     except Exception as e:
+#         print(f"Error loading scores from {scores_filename}: {e}")
+#         continue
+
+#     # Calculate the moving average for each window of 50 episodes
+#     avg_scores = []
+#     x_ticks = []
+#     for i in range(0, len(scores), window_size):
+#         window_avg = np.mean(scores[i:i + window_size])
+#         avg_scores.append(window_avg)
+#         x_ticks.append(i + window_size)  # x values should be at the end of each window
+
+#     # Plot
+#     plt.plot(x_ticks, avg_scores, label=f'B.S.={batch_size}', marker='o')
+
+# # Finalize the plot
+# plt.xlabel('Episode')
+# plt.ylabel(f'Average Reward (over {window_size} episodes)')
+# plt.title(f'Reward Average per {window_size} Episodes with \n(epsilon ={epsilon}, epsilon_decrement={epsilon_dec}, Learning Rate={lr})')
+# plt.legend()
+# plt.grid(True)
+
+# # Save and show the plot
+# plot_filename = f'plots/reward_avg_per_{window_size}_episodes_comparison_bs-{n_episodes}_eps_{epsilon}_eps_d_{epsilon_dec}_lr_{lr}.png'
+# plt.savefig(plot_filename)
+# print(f"Plot saved to: {plot_filename}")
+# plt.show()
+
+#########################################################
+################# EPSILON DECREMENT #####################
+#########################################################
 # Prepare to plot
 plt.figure(figsize=(12, 6))
-for batch_size in batch_size_values:
+for epsilon_dec in eps_dec_values:
     # Generate filename
     scores_filename = SCORES_FILENAME_TEMPLATE.format(
         episodes=n_episodes,
@@ -240,17 +333,17 @@ for batch_size in batch_size_values:
         continue
 
     # Plot
-    plt.plot(range(1, n_episodes + 1), scores, label=f'B.S.={batch_size}', marker='o')
+    plt.plot(range(1, n_episodes + 1), scores, label=f'eps_dec={epsilon_dec}', marker='o')
 
 # Finalize the plot
 plt.xlabel('Episode')
 plt.ylabel('Reward')
-plt.title(f'Reward per Episode for different models with \n(epsilon ={epsilon}, epsilon_decrement={epsilon_dec}, Learning Rate={lr})')
+plt.title(f'Reward per Episode for different models with \n(epsilon ={epsilon}, Batch Size={batch_size}, Learning Rate={lr})')
 plt.legend()
 plt.grid(True)
 
 # Save and show the plot
-plot_filename = f'plots/reward_per_episode_comparison_bs-{n_episodes}_eps_{epsilon}_eps_d_{epsilon_dec}_lr_{lr}.png'
+plot_filename = f'plots/reward_per_episode_comparison_eps_dec-{n_episodes}_eps_{epsilon}_bs_{batch_size}_lr_{lr}.png'
 plt.savefig(plot_filename)
 print(f"Plot saved to: {plot_filename}")
 plt.show()
@@ -258,7 +351,7 @@ plt.show()
 ### Average reward plot
 # Prepare to plot
 plt.figure(figsize=(12, 6))
-for batch_size in batch_size_values:
+for epsilon_dec in eps_dec_values:
     # Generate filename
     scores_filename = SCORES_FILENAME_TEMPLATE.format(
         episodes=n_episodes,
@@ -290,17 +383,17 @@ for batch_size in batch_size_values:
         x_ticks.append(i + window_size)  # x values should be at the end of each window
 
     # Plot
-    plt.plot(x_ticks, avg_scores, label=f'B.S.={batch_size}', marker='o')
+    plt.plot(x_ticks, avg_scores, label=f'eps_dec={epsilon_dec}', marker='o')
 
 # Finalize the plot
 plt.xlabel('Episode')
 plt.ylabel(f'Average Reward (over {window_size} episodes)')
-plt.title(f'Reward Average per {window_size} Episodes with \n(epsilon ={epsilon}, epsilon_decrement={epsilon_dec}, Learning Rate={lr})')
+plt.title(f'Reward Average per {window_size} Episodes with \n(epsilon ={epsilon}, Batch Size={batch_size}, Learning Rate={lr})')
 plt.legend()
 plt.grid(True)
 
 # Save and show the plot
-plot_filename = f'plots/reward_avg_per_{window_size}_episodes_comparison_bs-{n_episodes}_eps_{epsilon}_eps_d_{epsilon_dec}_lr_{lr}.png'
+plot_filename = f'plots/reward_avg_per_{window_size}_episodes_comparison__eps_dec-{n_episodes}_eps_{epsilon}_bs_{batch_size}_lr_{lr}.png'
 plt.savefig(plot_filename)
 print(f"Plot saved to: {plot_filename}")
 plt.show()
