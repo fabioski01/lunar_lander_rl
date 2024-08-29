@@ -71,6 +71,9 @@ class Agent(object):
         self.epsilon_min = epsilon_end
         self.batch_size = batch_size
         self.memory = MemoryBuffer(mem_size)
+        # to run DQN exclusively
+        self.q_func = QNN(8, 4, 42).to(device)  # Initialize Q-network
+        self.optimizer = optim.Adam(self.q_func.parameters(), lr=lr)
 
     # Stores a transition in memory.
     def save(self, state, action, reward, new_state, done):
@@ -100,7 +103,24 @@ class Agent(object):
 
     # Placeholder for the learning process (implemented in DoubleQAgent).    
     def learn(self):
-        raise Exception("Not implemented")
+        # raise Exception("Not implemented")
+        # simple dqn learning
+        if self.memory.trans_counter < self.batch_size: # wait before you start learning
+            return
+        # 1. Choose a sample from past transitions:     # Sample a batch of experiences from memory.
+        states, actions, rewards, new_states, terminals = self.memory.random_sample(self.batch_size)
+        # 2. Update the target values    # Compute the Q-values for the next states using the target network.
+        q_next = self.q_func(new_states).detach().max(1)[0].unsqueeze(1)
+        q_updated = rewards + self.gamma * q_next * (1 - terminals)
+        q = self.q_func(states).gather(1, actions)
+        # 3. Update the main NN    # Update the Q-values of the current network using the Bellman equation.
+        loss = F.mse_loss(q, q_updated)
+        loss = F.mse_loss(q, q_updated)
+        self.optimizer.zero_grad()
+        loss.backward()
+        self.optimizer.step()
+        # 4. Reduce the exploration rate
+        self.reduce_epsilon()       
     
     # Save/load the model's parameters.
     def save_model(self, path):

@@ -13,7 +13,7 @@ window_size = 50   # The window size for calculating the moving average
 
 # Set up folder and file naming conventions
 FOLDER_NAME = 'torch_model'
-SCORES_FILENAME_TEMPLATE = f'{FOLDER_NAME}/dqn_scores_{{episodes}}_eps_{{eps}}_eps_d_{{eps_d}}_bs_{{bs}}_lr_{{lr}}.json'
+SCORES_FILENAME_TEMPLATE = f'{FOLDER_NAME}/ddqn_scores_{{episodes}}_eps_{{eps}}_eps_d_{{eps_d}}_bs_{{bs}}_lr_{{lr}}.json'
 
 #########################################################
 # Define the other hyperparameters for the models #######
