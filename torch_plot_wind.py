@@ -27,7 +27,7 @@ ddqn_wind_filename = f'{ddqn_wind_folder}/ddqn_scores_{n_episodes}_eps_{epsilon}
 ddqn_non_wind_filename = f'{ddqn_non_wind_folder}/ddqn_scores_{n_episodes}_eps_{epsilon}_eps_d_{epsilon_dec}_bs_{batch_size}_lr_{lr}.json'
 
 # File paths for DQN models
-dqn_wind_folder = 'torch_dqn'
+dqn_wind_folder = 'torch_dqn_wind'
 dqn_non_wind_folder = 'torch_dqn'
 
 dqn_wind_filename = f'{dqn_wind_folder}/dqn_scores_{n_episodes}_eps_{epsilon}_eps_d_{epsilon_dec}_bs_{batch_size}_lr_{lr}.json'
