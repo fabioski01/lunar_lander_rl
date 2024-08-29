@@ -21,16 +21,16 @@ rolling_window = 100  # The window size for calculating the rolling avera
 # Comment the one which is being compared ###############
 #########################################################
 epsilon = 1.0
-epsilon_dec = 0.999
+epsilon_dec = 0.995
 batch_size = 128
-lr = 0.001
+lr = 0.0001
 
 #########################################################
 ##################### DQN vs DDQN #######################
 #########################################################
 # File paths for DQN and DDQN
 dqn_folder = 'torch_dqn'
-ddqn_folder = 'torch_model'
+ddqn_folder = 'torch_DDqn'
 
 dqn_filename = f'{dqn_folder}/dqn_scores_{n_episodes}_eps_{epsilon}_eps_d_{epsilon_dec}_bs_{batch_size}_lr_{lr}.json'
 ddqn_filename = f'{ddqn_folder}/ddqn_scores_{n_episodes}_eps_{epsilon}_eps_d_{epsilon_dec}_bs_{batch_size}_lr_{lr}.json'

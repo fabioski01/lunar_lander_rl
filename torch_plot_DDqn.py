@@ -12,7 +12,7 @@ n_episodes = 1500  # Use the same number of episodes for all models
 window_size = 50   # The window size for calculating the moving average
 
 # Set up folder and file naming conventions
-FOLDER_NAME = 'torch_model'
+FOLDER_NAME = 'torch_DDqn'
 SCORES_FILENAME_TEMPLATE = f'{FOLDER_NAME}/ddqn_scores_{{episodes}}_eps_{{eps}}_eps_d_{{eps_d}}_bs_{{bs}}_lr_{{lr}}.json'
 
 #########################################################
