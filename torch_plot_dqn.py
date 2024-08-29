@@ -131,375 +131,148 @@ plt.savefig(rolling_avg_plot_filename)
 print(f"Rolling average reward plot saved to: {rolling_avg_plot_filename}")
 plt.show()
 
-#########################################################
-##################### EPSILON ###########################
-#########################################################
-# Prepare to plot
-# plt.figure(figsize=(12, 6))
-# for eps in eps_values:
-#     Generate filename
-#     scores_filename = SCORES_FILENAME_TEMPLATE.format(
-#         episodes=n_episodes,
-#         eps=eps,
-#         eps_d=epsilon_dec,
-#         bs=batch_size,
-#         lr=lr
-#     )
-    
-#     Check if file exists
-#     if not os.path.isfile(scores_filename):
-#         print(f"File not found: {scores_filename}")
-#         continue
+###### SINGLE GIGA PLOT
+# Define the list of file configurations (as tuples of parameters)
+configurations = [
+    (0.9, 0.995, 128, 0.001),
+    (0.999, 0.995, 128, 0.001),
+    (1.0, 0.9, 128, 0.001),
+    (1.0, 0.995, 64, 0.001),
+    (1.0, 0.995, 128, 0.01),
+    (1.0, 0.995, 128, 0.001),
+    (1.0, 0.995, 128, 0.0001),
+    (1.0, 0.995, 256, 0.001),
+    (1.0, 0.999, 128, 0.001)
+]
 
-#     Load scores
-#     try:
-#         with open(scores_filename, 'r') as fp:
-#             scores = json.load(fp)
-#     except Exception as e:
-#         print(f"Error loading scores from {scores_filename}: {e}")
-#         continue
+# Prepare to plot DQN vs. DDQN for all configurations
+plt.figure(figsize=(12, 6))
 
-#     Plot
-#     plt.plot(range(1, n_episodes + 1), scores, label=f'Eps={eps}', marker='o')
+# Loop through each configuration and plot the scores
+for epsilon, epsilon_dec, batch_size, lr in configurations:
+    # Generate filenames for DQN and DDQN
+    dqn_filename = f'{dqn_folder}/dqn_scores_{n_episodes}_eps_{epsilon}_eps_d_{epsilon_dec}_bs_{batch_size}_lr_{lr}.json'
+    ddqn_filename = f'{ddqn_folder}/ddqn_scores_{n_episodes}_eps_{epsilon}_eps_d_{epsilon_dec}_bs_{batch_size}_lr_{lr}.json'
 
-# Finalize the plot
-# plt.xlabel('Episode')
-# plt.ylabel('Reward')
-# plt.title(f'Reward per Episode for different models with \n(epsilon_decrement={epsilon_dec}, Batch Size={batch_size}, Learning Rate={lr})')
-# plt.legend()
-# plt.grid(True)
+    # Plot DQN results if the file exists
+    if os.path.isfile(dqn_filename):
+        with open(dqn_filename, 'r') as fp:
+            dqn_scores = json.load(fp)
+        plt.plot(range(1, n_episodes + 1), dqn_scores, label=f'DQN eps={epsilon}, eps_d={epsilon_dec}, bs={batch_size}, lr={lr}', linestyle='-')
 
-# Save and show the plot
-# plot_filename = f'plots/reward_per_episode_comparison_eps-{n_episodes}_eps_d_{epsilon_dec}_bs_{batch_size}_lr_{lr}.png'
-# plt.savefig(plot_filename)
-# print(f"Plot saved to: {plot_filename}")
-# plt.show()
-
-# ## Average reward plot
-# Prepare to plot
-# plt.figure(figsize=(12, 6))
-# for eps in eps_values:
-#     Generate filename
-#     scores_filename = SCORES_FILENAME_TEMPLATE.format(
-#         episodes=n_episodes,
-#         eps=eps,
-#         eps_d=epsilon_dec,
-#         bs=batch_size,
-#         lr=lr
-#     )
-    
-#     Check if file exists
-#     if not os.path.isfile(scores_filename):
-#         print(f"File not found: {scores_filename}")
-#         continue
-
-#     Load scores
-#     try:
-#         with open(scores_filename, 'r') as fp:
-#             scores = json.load(fp)
-#     except Exception as e:
-#         print(f"Error loading scores from {scores_filename}: {e}")
-#         continue
-
-#     Calculate the moving average for each window of 50 episodes
-#     avg_scores = []
-#     x_ticks = []
-#     for i in range(0, len(scores), window_size):
-#         window_avg = np.mean(scores[i:i + window_size])
-#         avg_scores.append(window_avg)
-#         x_ticks.append(i + window_size)  # x values should be at the end of each window
-
-#     Plot
-#     plt.plot(x_ticks, avg_scores, label=f'Eps={eps}', marker='o')
+    # Plot DDQN results if the file exists
+    if os.path.isfile(ddqn_filename):
+        with open(ddqn_filename, 'r') as fp:
+            ddqn_scores = json.load(fp)
+        plt.plot(range(1, n_episodes + 1), ddqn_scores, label=f'DDQN eps={epsilon}, eps_d={epsilon_dec}, bs={batch_size}, lr={lr}', linestyle='dotted')
 
 # Finalize the plot
-# plt.xlabel('Episode')
-# plt.ylabel(f'Average Reward (over {window_size} episodes)')
-# plt.title(f'Reward Average per {window_size} Episodes with \n(epsilon_decrement={epsilon_dec}, Batch Size={batch_size}, Learning Rate={lr})')
-# plt.legend()
-# plt.grid(True)
+plt.xlabel('Episode')
+plt.ylabel('Reward')
+plt.title('Reward per Episode: DQN vs DDQN (All Configurations)')
+plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
+plt.ylim(-200)
+plt.grid(True)
 
 # Save and show the plot
-# plot_filename = f'plots/reward_avg_per_{window_size}_episodes_comparison_eps-{n_episodes}_eps_d_{epsilon_dec}_bs_{batch_size}_lr_{lr}.png'
-# plt.savefig(plot_filename)
-# print(f"Plot saved to: {plot_filename}")
-# plt.show()
+plot_filename = 'plots/dqn_vs_ddqn/reward_per_episode_comparison_DQN_vs_DDQN_all_configs.png'
+plt.savefig(plot_filename, bbox_inches='tight') # bbox_inches='tight'
+print(f"Plot saved to: {plot_filename}")
+plt.show()
 
-#########################################################
-#################### LEARNING RATE ######################
-#########################################################
-# # Prepare to plot
-# plt.figure(figsize=(12, 6))
-# for lr in lr_values:
-#     # Generate filename
-#     scores_filename = SCORES_FILENAME_TEMPLATE.format(
-#         episodes=n_episodes,
-#         eps=epsilon,
-#         eps_d=epsilon_dec,
-#         bs=batch_size,
-#         lr=lr
-#     )
-    
-#     # Check if file exists
-#     if not os.path.isfile(scores_filename):
-#         print(f"File not found: {scores_filename}")
-#         continue
-#     # Load scores
-#     try:
-#         with open(scores_filename, 'r') as fp:
-#             scores = json.load(fp)
-#     except Exception as e:
-#         print(f"Error loading scores from {scores_filename}: {e}")
-#         continue
+# Prepare to plot rolling average rewards for all configurations
+plt.figure(figsize=(12, 6))
 
-#     # Plot
-#     plt.plot(range(1, n_episodes + 1), scores, label=f'L.R.={lr}', marker='o')
+# Loop through each configuration and plot the rolling averages
+for epsilon, epsilon_dec, batch_size, lr in configurations:
+    # Generate filenames for DQN and DDQN
+    dqn_filename = f'{dqn_folder}/dqn_scores_{n_episodes}_eps_{epsilon}_eps_d_{epsilon_dec}_bs_{batch_size}_lr_{lr}.json'
+    ddqn_filename = f'{ddqn_folder}/ddqn_scores_{n_episodes}_eps_{epsilon}_eps_d_{epsilon_dec}_bs_{batch_size}_lr_{lr}.json'
 
-# # Finalize the plot
-# plt.xlabel('Episode')
-# plt.ylabel('Reward')
-# plt.title(f'Reward per Episode for different models with \n(epsilon ={epsilon}, epsilon_decrement={epsilon_dec}, Batch Size={batch_size})')
-# plt.legend()
-# plt.grid(True)
+    # Calculate and plot rolling average rewards for DQN
+    if os.path.isfile(dqn_filename):
+        with open(dqn_filename, 'r') as fp:
+            dqn_scores = json.load(fp)
+        rolling_avg_dqn_scores = np.convolve(dqn_scores, np.ones(rolling_window)/rolling_window, mode='valid')
+        plt.plot(range(rolling_window, len(dqn_scores) + 1), rolling_avg_dqn_scores, label=f'DQN eps={epsilon}, eps_d={epsilon_dec}, bs={batch_size}, lr={lr}', linestyle='-')
 
-# # Save and show the plot
-# plot_filename = f'plots/reward_per_episode_comparison_lr-{n_episodes}_eps_{epsilon}_eps_d_{epsilon_dec}_bs_{batch_size}.png'
-# plt.savefig(plot_filename)
-# print(f"Plot saved to: {plot_filename}")
-# plt.show()
+    # Calculate and plot rolling average rewards for DDQN
+    if os.path.isfile(ddqn_filename):
+        with open(ddqn_filename, 'r') as fp:
+            ddqn_scores = json.load(fp)
+        rolling_avg_ddqn_scores = np.convolve(ddqn_scores, np.ones(rolling_window)/rolling_window, mode='valid')
+        plt.plot(range(rolling_window, len(ddqn_scores) + 1), rolling_avg_ddqn_scores, label=f'DDQN eps={epsilon}, eps_d={epsilon_dec}, bs={batch_size}, lr={lr}', linestyle='dotted')
 
-# ### Average reward plot
-# # Prepare to plot
-# plt.figure(figsize=(12, 6))
-# for lr in lr_values:
-#     # Generate filename
-#     scores_filename = SCORES_FILENAME_TEMPLATE.format(
-#         episodes=n_episodes,
-#         eps=epsilon,
-#         eps_d=epsilon_dec,
-#         bs=batch_size,
-#         lr=lr
-#     )
-    
-#     # Check if file exists
-#     if not os.path.isfile(scores_filename):
-#         print(f"File not found: {scores_filename}")
-#         continue
+# Finalize the plot for rolling average rewards
+plt.xlabel('Episode')
+plt.ylabel(f'Rolling Average Reward (over {rolling_window} episodes)')
+plt.title('Rolling Average Reward per Episode: DQN vs DDQN (All Configurations)')
+plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
+plt.ylim(-200)
+plt.grid(True)
 
-#     # Load scores
-#     try:
-#         with open(scores_filename, 'r') as fp:
-#             scores = json.load(fp)
-#     except Exception as e:
-#         print(f"Error loading scores from {scores_filename}: {e}")
-#         continue
+# Save and show the rolling average reward plot
+rolling_avg_plot_filename = 'plots/dqn_vs_ddqn/reward_rolling_avg_comparison_DQN_vs_DDQN_all_configs.png'
+plt.savefig(rolling_avg_plot_filename, bbox_inches='tight')
+print(f"Rolling average reward plot saved to: {rolling_avg_plot_filename}")
+plt.show()
 
-#     # Calculate the moving average for each window of 50 episodes
-#     avg_scores = []
-#     x_ticks = []
-#     for i in range(0, len(scores), window_size):
-#         window_avg = np.mean(scores[i:i + window_size])
-#         avg_scores.append(window_avg)
-#         x_ticks.append(i + window_size)  # x values should be at the end of each window
+##########################################à
+### only ddqn
+# Prepare to plot DQN vs. DDQN for all configurations
+plt.figure(figsize=(12, 6))
 
-#     # Plot
-#     plt.plot(x_ticks, avg_scores, label=f'L.R.={lr}', marker='o')
+# Loop through each configuration and plot the scores
+for epsilon, epsilon_dec, batch_size, lr in configurations:
+    # Generate filenames for DQN and DDQN
+    # dqn_filename = f'{dqn_folder}/dqn_scores_{n_episodes}_eps_{epsilon}_eps_d_{epsilon_dec}_bs_{batch_size}_lr_{lr}.json'
+    ddqn_filename = f'{ddqn_folder}/ddqn_scores_{n_episodes}_eps_{epsilon}_eps_d_{epsilon_dec}_bs_{batch_size}_lr_{lr}.json'
 
-# # Finalize the plot
-# plt.xlabel('Episode')
-# plt.ylabel(f'Average Reward (over {window_size} episodes)')
-# plt.title(f'Reward Average per {window_size} Episodes with \n(epsilon ={epsilon}, epsilon_decrement={epsilon_dec}, Batch Size={batch_size})')
-# plt.legend()
-# plt.grid(True)
+    # Plot DDQN results if the file exists
+    if os.path.isfile(ddqn_filename):
+        with open(ddqn_filename, 'r') as fp:
+            ddqn_scores = json.load(fp)
+        plt.plot(range(1, n_episodes + 1), ddqn_scores, label=f'DDQN eps={epsilon}, eps_d={epsilon_dec}, bs={batch_size}, lr={lr}', linestyle='--')
 
-# # Save and show the plot
-# plot_filename = f'plots/reward_avg_per_{window_size}_episodes_comparison_lr-{n_episodes}_eps_{epsilon}_eps_d_{epsilon_dec}_bs_{batch_size}.png'
-# plt.savefig(plot_filename)
-# print(f"Plot saved to: {plot_filename}")
-# plt.show()
+# Finalize the plot
+plt.xlabel('Episode')
+plt.ylabel('Reward')
+plt.title('Reward per Episode: DDQN (All Configurations)')
+plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
+plt.ylim(-200)
+plt.grid(True)
 
-#########################################################
-###################### BATCH SIZE #######################
-#########################################################
-# # Prepare to plot
-# plt.figure(figsize=(12, 6))
-# for batch_size in batch_size_values:
-#     # Generate filename
-#     scores_filename = SCORES_FILENAME_TEMPLATE.format(
-#         episodes=n_episodes,
-#         eps=epsilon,
-#         eps_d=epsilon_dec,
-#         bs=batch_size,
-#         lr=lr
-#     )
-    
-#     # Check if file exists
-#     if not os.path.isfile(scores_filename):
-#         print(f"File not found: {scores_filename}")
-#         continue
-#     # Load scores
-#     try:
-#         with open(scores_filename, 'r') as fp:
-#             scores = json.load(fp)
-#     except Exception as e:
-#         print(f"Error loading scores from {scores_filename}: {e}")
-#         continue
+# Save and show the plot
+plot_filename = 'plots/reward_per_episode_comparison_DDQN_all_configs.png'
+plt.savefig(plot_filename, bbox_inches='tight') # bbox_inches='tight'
+print(f"Plot saved to: {plot_filename}")
+plt.show()
 
-#     # Plot
-#     plt.plot(range(1, n_episodes + 1), scores, label=f'B.S.={batch_size}', marker='o')
+# Prepare to plot rolling average rewards for all configurations
+plt.figure(figsize=(12, 6))
 
-# # Finalize the plot
-# plt.xlabel('Episode')
-# plt.ylabel('Reward')
-# plt.title(f'Reward per Episode for different models with \n(epsilon ={epsilon}, epsilon_decrement={epsilon_dec}, Learning Rate={lr})')
-# plt.legend()
-# plt.grid(True)
+# Loop through each configuration and plot the rolling averages
+for epsilon, epsilon_dec, batch_size, lr in configurations:
+    # Generate filenames for DDQN
+    ddqn_filename = f'{ddqn_folder}/ddqn_scores_{n_episodes}_eps_{epsilon}_eps_d_{epsilon_dec}_bs_{batch_size}_lr_{lr}.json'
 
-# # Save and show the plot
-# plot_filename = f'plots/reward_per_episode_comparison_bs-{n_episodes}_eps_{epsilon}_eps_d_{epsilon_dec}_lr_{lr}.png'
-# plt.savefig(plot_filename)
-# print(f"Plot saved to: {plot_filename}")
-# plt.show()
+    # Calculate and plot rolling average rewards for DDQN
+    if os.path.isfile(ddqn_filename):
+        with open(ddqn_filename, 'r') as fp:
+            ddqn_scores = json.load(fp)
+        rolling_avg_ddqn_scores = np.convolve(ddqn_scores, np.ones(rolling_window)/rolling_window, mode='valid')
+        plt.plot(range(rolling_window, len(ddqn_scores) + 1), rolling_avg_ddqn_scores, label=f'DDQN eps={epsilon}, eps_d={epsilon_dec}, bs={batch_size}, lr={lr}', linestyle='--')
 
-# ### Average reward plot
-# # Prepare to plot
-# plt.figure(figsize=(12, 6))
-# for batch_size in batch_size_values:
-#     # Generate filename
-#     scores_filename = SCORES_FILENAME_TEMPLATE.format(
-#         episodes=n_episodes,
-#         eps=epsilon,
-#         eps_d=epsilon_dec,
-#         bs=batch_size,
-#         lr=lr
-#     )
-    
-#     # Check if file exists
-#     if not os.path.isfile(scores_filename):
-#         print(f"File not found: {scores_filename}")
-#         continue
+# Finalize the plot for rolling average rewards
+plt.xlabel('Episode')
+plt.ylabel(f'Rolling Average Reward (over {rolling_window} episodes)')
+plt.title('Rolling Average Reward per Episode: DDQN (All Configurations)')
+plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
+plt.ylim(-200)
+plt.grid(True)
 
-#     # Load scores
-#     try:
-#         with open(scores_filename, 'r') as fp:
-#             scores = json.load(fp)
-#     except Exception as e:
-#         print(f"Error loading scores from {scores_filename}: {e}")
-#         continue
-
-#     # Calculate the moving average for each window of 50 episodes
-#     avg_scores = []
-#     x_ticks = []
-#     for i in range(0, len(scores), window_size):
-#         window_avg = np.mean(scores[i:i + window_size])
-#         avg_scores.append(window_avg)
-#         x_ticks.append(i + window_size)  # x values should be at the end of each window
-
-#     # Plot
-#     plt.plot(x_ticks, avg_scores, label=f'B.S.={batch_size}', marker='o')
-
-# # Finalize the plot
-# plt.xlabel('Episode')
-# plt.ylabel(f'Average Reward (over {window_size} episodes)')
-# plt.title(f'Reward Average per {window_size} Episodes with \n(epsilon ={epsilon}, epsilon_decrement={epsilon_dec}, Learning Rate={lr})')
-# plt.legend()
-# plt.grid(True)
-
-# # Save and show the plot
-# plot_filename = f'plots/reward_avg_per_{window_size}_episodes_comparison_bs-{n_episodes}_eps_{epsilon}_eps_d_{epsilon_dec}_lr_{lr}.png'
-# plt.savefig(plot_filename)
-# print(f"Plot saved to: {plot_filename}")
-# plt.show()
-
-#########################################################
-################# EPSILON DECREMENT #####################
-#########################################################
-# # Prepare to plot
-# plt.figure(figsize=(12, 6))
-# for epsilon_dec in eps_dec_values:
-#     # Generate filename
-#     scores_filename = SCORES_FILENAME_TEMPLATE.format(
-#         episodes=n_episodes,
-#         eps=epsilon,
-#         eps_d=epsilon_dec,
-#         bs=batch_size,
-#         lr=lr
-#     )
-    
-#     # Check if file exists
-#     if not os.path.isfile(scores_filename):
-#         print(f"File not found: {scores_filename}")
-#         continue
-#     # Load scores
-#     try:
-#         with open(scores_filename, 'r') as fp:
-#             scores = json.load(fp)
-#     except Exception as e:
-#         print(f"Error loading scores from {scores_filename}: {e}")
-#         continue
-
-#     # Plot
-#     plt.plot(range(1, n_episodes + 1), scores, label=f'eps_dec={epsilon_dec}', marker='o')
-
-# # Finalize the plot
-# plt.xlabel('Episode')
-# plt.ylabel('Reward')
-# plt.title(f'Reward per Episode for different models with \n(epsilon ={epsilon}, Batch Size={batch_size}, Learning Rate={lr})')
-# plt.legend()
-# plt.grid(True)
-
-# # Save and show the plot
-# plot_filename = f'plots/reward_per_episode_comparison_eps_dec-{n_episodes}_eps_{epsilon}_bs_{batch_size}_lr_{lr}.png'
-# plt.savefig(plot_filename)
-# print(f"Plot saved to: {plot_filename}")
-# plt.show()
-
-# ### Average reward plot
-# # Prepare to plot
-# plt.figure(figsize=(12, 6))
-# for epsilon_dec in eps_dec_values:
-#     # Generate filename
-#     scores_filename = SCORES_FILENAME_TEMPLATE.format(
-#         episodes=n_episodes,
-#         eps=epsilon,
-#         eps_d=epsilon_dec,
-#         bs=batch_size,
-#         lr=lr
-#     )
-    
-#     # Check if file exists
-#     if not os.path.isfile(scores_filename):
-#         print(f"File not found: {scores_filename}")
-#         continue
-
-#     # Load scores
-#     try:
-#         with open(scores_filename, 'r') as fp:
-#             scores = json.load(fp)
-#     except Exception as e:
-#         print(f"Error loading scores from {scores_filename}: {e}")
-#         continue
-
-#     # Calculate the moving average for each window of 50 episodes
-#     avg_scores = []
-#     x_ticks = []
-#     for i in range(0, len(scores), window_size):
-#         window_avg = np.mean(scores[i:i + window_size])
-#         avg_scores.append(window_avg)
-#         x_ticks.append(i + window_size)  # x values should be at the end of each window
-
-#     # Plot
-#     plt.plot(x_ticks, avg_scores, label=f'eps_dec={epsilon_dec}', marker='o')
-
-# # Finalize the plot
-# plt.xlabel('Episode')
-# plt.ylabel(f'Average Reward (over {window_size} episodes)')
-# plt.title(f'Reward Average per {window_size} Episodes with \n(epsilon ={epsilon}, Batch Size={batch_size}, Learning Rate={lr})')
-# plt.legend()
-# plt.grid(True)
-
-# # Save and show the plot
-# plot_filename = f'plots/reward_avg_per_{window_size}_episodes_comparison__eps_dec-{n_episodes}_eps_{epsilon}_bs_{batch_size}_lr_{lr}.png'
-# plt.savefig(plot_filename)
-# print(f"Plot saved to: {plot_filename}")
-# plt.show()
+# Save and show the rolling average reward plot
+rolling_avg_plot_filename = 'plots/reward_rolling_avg_comparison__DDQN_all_configs.png'
+plt.savefig(rolling_avg_plot_filename, bbox_inches='tight')
+print(f"Rolling average reward plot saved to: {rolling_avg_plot_filename}")
+plt.show()
