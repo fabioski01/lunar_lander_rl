@@ -24,6 +24,7 @@ def train_agent(n_episodes=1500, epsilon=1.0, epsilon_dec=0.995, batch_size=128,
     print(f"Training a DDQN agent on {n_episodes} episodes. Pretrained model = {load_latest_model}")
     
     # Creates an environment
+    # WATCH OUT FOR WIND
     env = gym.make("LunarLander-v2", enable_wind = True, wind_power = 15.0, turbulence_power = 1.0)
     # Initializes the DoubleQAgent with specific hyperparameters
     agent = DoubleQAgent(gamma=0.99,epsilon=epsilon,epsilon_dec=epsilon_dec,lr=lr,mem_size=200000,batch_size=batch_size,epsilon_end=0.01)

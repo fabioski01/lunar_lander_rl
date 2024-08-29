@@ -6,8 +6,8 @@ import time # for benchmarking
 import numpy as np
 from train_torch import Agent # This imports the Agent class from train_torch.py file, which contains the core logic for the agent.
 
-FOLDER_NAME = 'torch_dqn'
-LOAD_MODEL_FILENAME = f'{FOLDER_NAME}/dqn_model' # Change this to change model to load
+FOLDER_NAME = 'torch_dqn_wind' # change depending on wind or not simulations
+# LOAD_MODEL_FILENAME = f'{FOLDER_NAME}/dqn_model' # Change this to change model to load
 
 MODEL_FILENAME_TEMPLATE = f'{FOLDER_NAME}/dqn_model_{{episodes}}_eps_{{eps}}_eps_d_{{eps_d}}_bs_{{bs}}_lr_{{lr}}.h5'
 SCORES_FILENAME_TEMPLATE = f'{FOLDER_NAME}/dqn_scores_{{episodes}}_eps_{{eps}}_eps_d_{{eps_d}}_bs_{{bs}}_lr_{{lr}}.json'
@@ -24,7 +24,8 @@ def train_agent(n_episodes=1500, epsilon=1.0, epsilon_dec=0.995, batch_size=128,
     print(f"Training a DQN agent on {n_episodes} episodes. Pretrained model = {load_latest_model}")
     
     # Creates an environment
-    env = gym.make("LunarLander-v2")
+    # WATCH OUT FOR WIND
+    env = gym.make("LunarLander-v2", enable_wind = True, wind_power = 15.0, turbulence_power = 1.0)
     # Initializes the DoubleQAgent with specific hyperparameters
     agent = Agent(gamma=0.99,epsilon=epsilon,epsilon_dec=epsilon_dec,lr=lr,mem_size=200000,batch_size=batch_size,epsilon_end=0.01)
     
@@ -142,7 +143,7 @@ def train_agent(n_episodes=1500, epsilon=1.0, epsilon_dec=0.995, batch_size=128,
 ###############################
 # Uncomment to train ##########
 ###############################
-agent = train_agent(lr=0.0001, load_latest_model=False) # missing lr tweaking
+agent = train_agent(load_latest_model=False) # missing lr tweaking
 
 
 ################################
