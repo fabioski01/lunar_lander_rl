@@ -142,7 +142,7 @@ def train_agent(n_episodes=1500, epsilon=1.0, epsilon_dec=0.995, batch_size=128,
 ###############################
 # Uncomment to train ##########
 ###############################
-agent = train_agent(epsilon=0.999, load_latest_model=False) # tweaking 
+agent = train_agent(epsilon_dec=0.999, load_latest_model=False) # missing lr tweaking
 
 
 ################################

@@ -20,7 +20,7 @@ rolling_window = 100  # The window size for calculating the rolling avera
 # Define the other hyperparameters for the models #######
 # Comment the one which is being compared ###############
 #########################################################
-epsilon = 0.999
+epsilon = 1.0
 epsilon_dec = 0.995
 batch_size = 128
 lr = 0.001
@@ -62,7 +62,7 @@ plt.legend()
 plt.grid(True)
 
 # Save and show the plot
-plot_filename = f'plots/reward_per_episode_comparison_DQN_vs_DDQN-{n_episodes}_eps_{epsilon}_eps_d_{epsilon_dec}_bs_{batch_size}_lr_{lr}.png'
+plot_filename = f'plots/dqn_vs_ddqn/reward_per_episode_comparison_DQN_vs_DDQN-{n_episodes}_eps_{epsilon}_eps_d_{epsilon_dec}_bs_{batch_size}_lr_{lr}.png'
 plt.savefig(plot_filename)
 print(f"Plot saved to: {plot_filename}")
 plt.show()
@@ -99,7 +99,7 @@ plt.legend()
 plt.grid(True)
 
 # Save and show the plot
-plot_filename = f'plots/reward_avg_per_{window_size}_episodes_comparison_DQN_vs_DDQN-{n_episodes}_eps_{epsilon}_eps_d_{epsilon_dec}_bs_{batch_size}_lr_{lr}.png'
+plot_filename = f'plots/dqn_vs_ddqn/reward_avg_per_{window_size}_episodes_comparison_DQN_vs_DDQN-{n_episodes}_eps_{epsilon}_eps_d_{epsilon_dec}_bs_{batch_size}_lr_{lr}.png'
 plt.savefig(plot_filename)
 print(f"Plot saved to: {plot_filename}")
 plt.show()
@@ -126,7 +126,7 @@ plt.legend()
 plt.grid(True)
 
 # Save and show the rolling average reward plot
-rolling_avg_plot_filename = f'plots/reward_rolling_avg_per_{rolling_window}_episodes_comparison_DQN_vs_DDQN-{n_episodes}_eps_{epsilon}_eps_d_{epsilon_dec}_bs_{batch_size}_lr_{lr}.png'
+rolling_avg_plot_filename = f'plots/dqn_vs_ddqn/reward_rolling_avg_per_{rolling_window}_episodes_comparison_DQN_vs_DDQN-{n_episodes}_eps_{epsilon}_eps_d_{epsilon_dec}_bs_{batch_size}_lr_{lr}.png'
 plt.savefig(rolling_avg_plot_filename)
 print(f"Rolling average reward plot saved to: {rolling_avg_plot_filename}")
 plt.show()
