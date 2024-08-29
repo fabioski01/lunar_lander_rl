@@ -6,13 +6,13 @@ import time # for benchmarking
 import numpy as np
 from train_torch import DoubleQAgent # This imports the DoubleQAgent class from train_torch.py file, which contains the core logic for the agent.
 
-FOLDER_NAME = 'torch_model'
-LOAD_MODEL_FILENAME = f'{FOLDER_NAME}/ddqn_model' # Change this to change model to load
+FOLDER_NAME = 'torch_DDqn_wind' # change depending on wind or not simulations
+# LOAD_MODEL_FILENAME = f'{FOLDER_NAME}/ddqn_model' # Change this to change model to load
 
 MODEL_FILENAME_TEMPLATE = f'{FOLDER_NAME}/ddqn_model_{{episodes}}_eps_{{eps}}_eps_d_{{eps_d}}_bs_{{bs}}_lr_{{lr}}.h5'
 SCORES_FILENAME_TEMPLATE = f'{FOLDER_NAME}/ddqn_scores_{{episodes}}_eps_{{eps}}_eps_d_{{eps_d}}_bs_{{bs}}_lr_{{lr}}.json'
 EPSILON_HISTORY_FILENAME_TEMPLATE = f'{FOLDER_NAME}/ddqn_epsilon_history_{{episodes}}_eps_{{eps}}_eps_d_{{eps_d}}_bs_{{bs}}_lr_{{lr}}.json'
-PLOT_FILENAME_TEMPLATE = f'plots/ddqn_reward_per_episode_{{episodes}}_eps_{{eps}}_eps_d_{{eps_d}}_bs_{{bs}}_lr_{{lr}}.png'
+PLOT_FILENAME_TEMPLATE = f'plots/ddqn_wind/ddqn_reward_per_episode_{{episodes}}_eps_{{eps}}_eps_d_{{eps_d}}_bs_{{bs}}_lr_{{lr}}.png'
 
 # Ensure the directory exists
 import os
@@ -24,7 +24,7 @@ def train_agent(n_episodes=1500, epsilon=1.0, epsilon_dec=0.995, batch_size=128,
     print(f"Training a DDQN agent on {n_episodes} episodes. Pretrained model = {load_latest_model}")
     
     # Creates an environment
-    env = gym.make("LunarLander-v2")
+    env = gym.make("LunarLander-v2", enable_wind = True, wind_power = 15.0, turbulence_power = 1.0)
     # Initializes the DoubleQAgent with specific hyperparameters
     agent = DoubleQAgent(gamma=0.99,epsilon=epsilon,epsilon_dec=epsilon_dec,lr=lr,mem_size=200000,batch_size=batch_size,epsilon_end=0.01)
     
@@ -142,7 +142,7 @@ def train_agent(n_episodes=1500, epsilon=1.0, epsilon_dec=0.995, batch_size=128,
 ###############################
 # Uncomment to train ##########
 ###############################
-#agent = train_agent(load_latest_model=False) # tweaking 
+agent = train_agent(load_latest_model=False) # tweaking 
 
 
 ################################
