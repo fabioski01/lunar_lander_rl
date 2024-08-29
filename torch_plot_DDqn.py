@@ -64,7 +64,7 @@ lr = 0.001
 # plt.grid(True)
 
 # # Save and show the plot
-# plot_filename = f'plots/reward_per_episode_comparison_eps-{n_episodes}_eps_d_{epsilon_dec}_bs_{batch_size}_lr_{lr}.png'
+# plot_filename = f'plots/ddqn_epsilon_comparison/reward_per_episode_comparison_eps-{n_episodes}_eps_d_{epsilon_dec}_bs_{batch_size}_lr_{lr}.png'
 # plt.savefig(plot_filename)
 # print(f"Plot saved to: {plot_filename}")
 # plt.show()
@@ -114,7 +114,7 @@ lr = 0.001
 # plt.grid(True)
 
 # # Save and show the plot
-# plot_filename = f'plots/reward_avg_per_{window_size}_episodes_comparison_eps-{n_episodes}_eps_d_{epsilon_dec}_bs_{batch_size}_lr_{lr}.png'
+# plot_filename = f'plots/ddqn_epsilon_comparison/reward_avg_per_{window_size}_episodes_comparison_eps-{n_episodes}_eps_d_{epsilon_dec}_bs_{batch_size}_lr_{lr}.png'
 # plt.savefig(plot_filename)
 # print(f"Plot saved to: {plot_filename}")
 # plt.show()
@@ -157,7 +157,7 @@ lr = 0.001
 # plt.grid(True)
 
 # # Save and show the plot
-# plot_filename = f'plots/reward_per_episode_comparison_lr-{n_episodes}_eps_{epsilon}_eps_d_{epsilon_dec}_bs_{batch_size}.png'
+# plot_filename = f'plots/ddqn_lr_comparison/reward_per_episode_comparison_lr-{n_episodes}_eps_{epsilon}_eps_d_{epsilon_dec}_bs_{batch_size}.png'
 # plt.savefig(plot_filename)
 # print(f"Plot saved to: {plot_filename}")
 # plt.show()
@@ -207,7 +207,7 @@ lr = 0.001
 # plt.grid(True)
 
 # # Save and show the plot
-# plot_filename = f'plots/reward_avg_per_{window_size}_episodes_comparison_lr-{n_episodes}_eps_{epsilon}_eps_d_{epsilon_dec}_bs_{batch_size}.png'
+# plot_filename = f'plots/ddqn_lr_comparison/reward_avg_per_{window_size}_episodes_comparison_lr-{n_episodes}_eps_{epsilon}_eps_d_{epsilon_dec}_bs_{batch_size}.png'
 # plt.savefig(plot_filename)
 # print(f"Plot saved to: {plot_filename}")
 # plt.show()
@@ -250,7 +250,7 @@ lr = 0.001
 # plt.grid(True)
 
 # # Save and show the plot
-# plot_filename = f'plots/reward_per_episode_comparison_bs-{n_episodes}_eps_{epsilon}_eps_d_{epsilon_dec}_lr_{lr}.png'
+# plot_filename = f'plots/ddqn_bs_comparison/reward_per_episode_comparison_bs-{n_episodes}_eps_{epsilon}_eps_d_{epsilon_dec}_lr_{lr}.png'
 # plt.savefig(plot_filename)
 # print(f"Plot saved to: {plot_filename}")
 # plt.show()
@@ -300,7 +300,7 @@ lr = 0.001
 # plt.grid(True)
 
 # # Save and show the plot
-# plot_filename = f'plots/reward_avg_per_{window_size}_episodes_comparison_bs-{n_episodes}_eps_{epsilon}_eps_d_{epsilon_dec}_lr_{lr}.png'
+# plot_filename = f'plots/ddqn_bs_comparison/reward_avg_per_{window_size}_episodes_comparison_bs-{n_episodes}_eps_{epsilon}_eps_d_{epsilon_dec}_lr_{lr}.png'
 # plt.savefig(plot_filename)
 # print(f"Plot saved to: {plot_filename}")
 # plt.show()
@@ -343,7 +343,7 @@ plt.legend()
 plt.grid(True)
 
 # Save and show the plot
-plot_filename = f'plots/reward_per_episode_comparison_eps_dec-{n_episodes}_eps_{epsilon}_bs_{batch_size}_lr_{lr}.png'
+plot_filename = f'plots/ddqn_eps_dec_comparison/reward_per_episode_comparison_eps_dec-{n_episodes}_eps_{epsilon}_bs_{batch_size}_lr_{lr}.png'
 plt.savefig(plot_filename)
 print(f"Plot saved to: {plot_filename}")
 plt.show()
@@ -393,7 +393,7 @@ plt.legend()
 plt.grid(True)
 
 # Save and show the plot
-plot_filename = f'plots/reward_avg_per_{window_size}_episodes_comparison__eps_dec-{n_episodes}_eps_{epsilon}_bs_{batch_size}_lr_{lr}.png'
+plot_filename = f'plots/ddqn_eps_dec_comparison/reward_avg_per_{window_size}_episodes_comparison__eps_dec-{n_episodes}_eps_{epsilon}_bs_{batch_size}_lr_{lr}.png'
 plt.savefig(plot_filename)
 print(f"Plot saved to: {plot_filename}")
 plt.show()
