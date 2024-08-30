@@ -25,6 +25,18 @@ def train_agent(n_episodes=1500, epsilon=1.0, epsilon_dec=0.995, batch_size=128,
     
     # Creates an environment
     # WATCH OUT FOR WIND
+    
+    # * `gravity` dictates the gravitational constant, this is bounded to be within 0 and -12. Default is -10.0
+
+    # * `enable_wind` determines if there will be wind effects applied to the lander. The wind is generated using
+    #  the function `tanh(sin(2 k (t+C)) + sin(pi k (t+C)))` where `k` is set to 0.01 and `C` is sampled randomly between -9999 and 9999.
+
+    # * `wind_power` dictates the maximum magnitude of linear wind applied to the craft. The recommended value for
+    #  `wind_power` is between 0.0 and 20.0.
+
+    # * `turbulence_power` dictates the maximum magnitude of rotational wind applied to the craft.
+    #  The recommended value for `turbulence_power` is between 0.0 and 2.0.
+
     env = gym.make("LunarLander-v2", enable_wind = True, wind_power = 15.0, turbulence_power = 1.0)
     # Initializes the DoubleQAgent with specific hyperparameters
     agent = DoubleQAgent(gamma=0.99,epsilon=epsilon,epsilon_dec=epsilon_dec,lr=lr,mem_size=200000,batch_size=batch_size,epsilon_end=0.01)
