@@ -144,32 +144,32 @@ plt.figure(figsize=(12, 6))
 # Calculate and plot rolling average rewards for DDQN with wind scenario
 if os.path.isfile(ddqn_wind_filename):
     rolling_avg_ddqn_wind_scores = np.convolve(ddqn_wind_scores, np.ones(rolling_window)/rolling_window, mode='valid')
-    plt.plot(range(rolling_window, len(ddqn_wind_scores) + 1), rolling_avg_ddqn_wind_scores, label=f'DDQN Wind Scenario (Rolling Avg per {rolling_window} Episodes)', linestyle='--')
+    plt.plot(range(rolling_window, len(ddqn_wind_scores) + 1), rolling_avg_ddqn_wind_scores, label=f'DDQN Wind Scenario', linestyle='--')
 
 # Calculate and plot rolling average rewards for DDQN without wind scenario
 if os.path.isfile(ddqn_non_wind_filename):
     rolling_avg_ddqn_non_wind_scores = np.convolve(ddqn_non_wind_scores, np.ones(rolling_window)/rolling_window, mode='valid')
-    plt.plot(range(rolling_window, len(ddqn_non_wind_scores) + 1), rolling_avg_ddqn_non_wind_scores, label=f'DDQN Non-Wind Scenario (Rolling Avg per {rolling_window} Episodes)', linestyle='--')
+    plt.plot(range(rolling_window, len(ddqn_non_wind_scores) + 1), rolling_avg_ddqn_non_wind_scores, label=f'DDQN Non-Wind Scenario', linestyle='--')
 
 # Calculate and plot rolling average rewards for DQN with wind scenario
 if os.path.isfile(dqn_wind_filename):
     rolling_avg_dqn_wind_scores = np.convolve(dqn_wind_scores, np.ones(rolling_window)/rolling_window, mode='valid')
-    plt.plot(range(rolling_window, len(dqn_wind_scores) + 1), rolling_avg_dqn_wind_scores, label=f'DQN Wind Scenario (Rolling Avg per {rolling_window} Episodes)', linestyle='--')
+    plt.plot(range(rolling_window, len(dqn_wind_scores) + 1), rolling_avg_dqn_wind_scores, label=f'DQN Wind Scenario', linestyle='--')
 
 # Calculate and plot rolling average rewards for DQN without wind scenario
 if os.path.isfile(dqn_non_wind_filename):
     rolling_avg_dqn_non_wind_scores = np.convolve(dqn_non_wind_scores, np.ones(rolling_window)/rolling_window, mode='valid')
-    plt.plot(range(rolling_window, len(dqn_non_wind_scores) + 1), rolling_avg_dqn_non_wind_scores, label=f'DQN Non-Wind Scenario (Rolling Avg per {rolling_window} Episodes)', linestyle='--')
+    plt.plot(range(rolling_window, len(dqn_non_wind_scores) + 1), rolling_avg_dqn_non_wind_scores, label=f'DQN Non-Wind Scenario', linestyle='--')
 
 # Finalize the plot for rolling average rewards
-plt.xlabel('Episode')
-plt.ylabel(f'Rolling Average Reward (over {rolling_window} episodes)')
-plt.title(f'Rolling Average Reward per {rolling_window} Episodes: DQN vs DDQN with and without Wind\n(epsilon={epsilon}, epsilon_decrement={epsilon_dec}, Batch Size={batch_size}, Learning Rate={lr})')
-plt.legend()
+plt.xlabel('Episode', fontsize=17)
+plt.ylabel(f'Rolling Average Reward (over {rolling_window} episodes)', fontsize=17)
+plt.title(f'Rolling Average Reward per {rolling_window} Episodes: DQN vs DDQN with and without Wind\n(epsilon={epsilon}, epsilon_decrement={epsilon_dec}, Batch Size={batch_size}, Learning Rate={lr})', fontsize=17)
+plt.legend(fontsize=17)
 plt.grid(True)
 
 # Save and show the rolling average reward plot
 rolling_avg_plot_filename = f'plots/ddqn_wind/reward_rolling_avg_per_{rolling_window}_episodes_comparison_DQN_vs_DDQN_with_and_without_wind-{n_episodes}_eps_{epsilon}_eps_d_{epsilon_dec}_bs_{batch_size}_lr_{lr}.png'
-plt.savefig(rolling_avg_plot_filename)
+plt.savefig(rolling_avg_plot_filename, bbox_inches='tight')
 print(f"Rolling average reward plot saved to: {rolling_avg_plot_filename}")
 plt.show()
